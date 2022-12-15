@@ -16,6 +16,12 @@
 				<button class="start-button btn" @click="startChat()">START</button>
 			</div>
 		</transition>
+    <transition name="fade" mode="out-in">
+			<div v-if="chatStart">
+				<input type="user_email" name="user_email" v-model="user_email"/>
+        <button @click="sendEmailtoBot()">Submit</button>
+			</div>
+		</transition>
 		<transition name="fade" mode="out-in">
 			<div v-if="chatStart && isRecording">
 				<button class="start-button btn" @click="stopRecording()">PAUSE</button>
@@ -38,6 +44,7 @@ export default {
 	mixins: [MessageHandlerMixin],
 	data() {
 		return {
+      user_email: '',
 			audioContext: undefined,
 			mediaRecorder: {},
 			isRecording: false,
@@ -79,6 +86,9 @@ export default {
 		this.canvasWidth = this.canvas.scrollWidth;
 	},
 	methods: {
+    sendEmailtoBot(){
+      this.sendMessageToBot(this.user_email)
+    },
 		startChat() {
 			this.$store.commit('setChatStart', true);
 			// this.startRecord();

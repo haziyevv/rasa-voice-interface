@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import VueSocketIO from 'vue-socket.io';
+import VueSocketIOExt from 'vue-socket.io-extended';
+import { io } from 'socket.io-client';
 import $ from 'jquery';
 import fontawesome from '@fortawesome/fontawesome';
 import solid from '@fortawesome/fontawesome-free-solid';
@@ -16,24 +17,15 @@ global.$ = $;
 fontawesome.library.add(solid);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-Vue.use(
-	new VueSocketIO({
-		debug: true,
-		connection: 'http://localhost:5005',
-		vuex: {
-			store,
-			actionPrefix: 'SOCKET_',
-			mutationPrefix: 'SOCKET_'
-		}
-		// transports: ['websocket', 'polling', 'flashsocket']
-	})
-);
+const socket = io('http://localhost:5005');
+
+Vue.use(VueSocketIOExt, socket, { store })
 
 /* App Mount */
 Vue.config.productionTip = false;
 
 new Vue({
-	router,
+  router,
 	store,
 	render: h => h(App)
 }).$mount('#app');

@@ -88,12 +88,12 @@ export default {
 		/* Append a userId to the user */
 		this.$store.commit('setUserId', uid);
 		/* Init WebSocket Event Listeners */
-		this.$socket.onclose = () => {
+		this.$socket.client.onclose = () => {
 			console.log('Socket closed ...');
 			this.$store.commit('setActiveConnection', false);
 		};
 
-		this.$socket.onerror = () => {
+		this.$socket.client.onerror = () => {
 			this.$store.commit('setActiveConnection', false);
 		};
 	},
@@ -104,7 +104,7 @@ export default {
 				// const audio = new Audio(this.getCurrentIncomingMessage.link);
 				if (data.link) {
 					const audio = document.getElementById('response-voice');
-					console.log(audio);
+          console.log(audio);
 					audio.src = data.link;
 					const playPromise = audio.play();
 					if (playPromise !== null) {
@@ -133,7 +133,7 @@ export default {
 	sockets: {
 		connect() {
 			console.log('socket connected~~~~');
-			this.$socket.emit('session_request', { session_id: this.userId });
+			this.$socket.client.emit('session_request', { session_id: this.userId });
 			this.$store.commit('setActiveConnection', true);
 			this.$store.commit('hideComponentsAfterSend');
 			this.$store.commit('setInputVisible', true);
@@ -153,7 +153,7 @@ export default {
 			// }
 		},
 		bot_uttered(data) {
-			console.log(data);
+			console.log(data.user);
 			if (data.user_utterance) { this.$store.commit('addOutgoingMessage', { text: data.user_utterance }); }
 			this.$store.commit('addIncomingMessages', data);
 			this.$store.commit('setResponseStatus', false);

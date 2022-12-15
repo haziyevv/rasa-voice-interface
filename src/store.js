@@ -12,6 +12,7 @@ const initialActiveDataImmutable = Object.freeze(initialActiveData);
 export default new Vuex.Store({
 	state: {
 		userId: undefined,
+    user_email: '',
 		currentInput: '',
 		inputVisible: false,
 		typing: false,
